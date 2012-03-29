@@ -174,10 +174,15 @@
 	-->
 
 	<!-- paragraph -->
+	<!-- extra <newLine/> to prevent successives paragraphs to be merged-->
 	<xsl:template match="p">
 		<parapraph>
 			<xsl:apply-templates/>
+			<newLine/>
 		</parapraph>
+	</xsl:template>
+	<xsl:template match="br">
+			<newLine/>
 	</xsl:template>
 
 	<!-- List -->
@@ -187,7 +192,7 @@
 			<xsl:when test=".//li">
 				<list>
 					<xsl:choose>
-						<xsl:when test="current()='ul'">
+						<xsl:when test="name()='ul'">
 							<xsl:attribute name="listStyle">unordered</xsl:attribute>
 						</xsl:when>
 						<xsl:otherwise>
@@ -224,7 +229,7 @@
 	
 	<!-- Images -->
 	<xsl:template match="img">
-		<popup>
+		<popup title="Cliquez pour voir l'image">
 			<multimedia src="../image/{@src}" type="jpeg"/>
 		</popup>
 	</xsl:template>
