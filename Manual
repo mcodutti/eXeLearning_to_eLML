@@ -1,0 +1,51 @@
+===========================================================
+                     eXe2eLML - Manual
+-----------------------------------------------------------
+  
+How to use it
+-------------
+  1 - Open the eXe document with the eXeLearning software
+  2 - Export it as a "unique HTML page"
+  3 - Apply this script on the result using a XSLT processor
+
+It should work with any XSLT processor although I only tried it with "xsltproc"
+
+What is done
+------------
+It creates the main structure of the eLML document but :
+
+  - As the eXe export do not preserve the embedding of section, the script
+    create one unit with all the learningObjects
+  - The first node is converted into the unit's entry not a learningObject
+
+The following IDevice are translated
+
+  - Activity : done
+	put into an <act> tag with the "act" icon
+  - FreeText : done
+	put into a <clarify> tag with no icon
+  - Objectives : done (treated as an Activity device)
+	put into an <clarify> tag with the "objective" icon
+  - Multiple Choice : done
+	put into an <act> tag, shuffle mode on
+  - Cloze (fillInBlanks) : partially done
+	As the answers are coded they are not in the resulting document
+  - custom : done
+	put into an <clarify> tag with the icon found in the first <img> tag
+
+Feedbacks
+
+  - <div> with the 'feedback' class are put into a <popup>
+
+Images
+
+  - If an image is found, it is translated into <multimedia> tag inside
+    a <popup> tag. (remove the <popup> if not suitable for you)
+  - It assumes that the images are to be found in the "../images" directory
+
+Inside an IDevice the following are translated
+  - ordered an unordered lists
+  - styles : bold, italic and code
+  - paragraphs
+===========================================================
+

@@ -1,0 +1,32 @@
+===========================================================
+                       eXe2eLML
+-----------------------------------------------------------
+  A script to convert a pedagogical document from the
+  eXeLearning format to the eLML one.
+
+  eXeLearning : http://exelearning.org/
+  eLML        : http://www.elml.org/
+
+  It has been written for my practical situation but may be
+  useful for others too.
+
+  How it works :
+  1 - Open the eXe document with the eXeLearning software
+  2 - Export it as a "unique HTML page"
+  3 - Apply this script on the result using a XSLT processor
+
+  It should work with any XSLT processor although 
+  I only tried it with "xsltproc"
+
+  by Marco Codutti, version 0.1
+  published under the Creative Common licence CC-BY
+  (http://creativecommons.org/licenses/by/3.0/)
+
+  History
+  -------
+  - 0.1 : March 2012
+    First version to meet my own needs.
+    The eXe parts that I'm not using are not converted 
+===========================================================
+
+    
