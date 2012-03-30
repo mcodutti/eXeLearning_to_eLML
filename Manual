@@ -9,6 +9,7 @@ How to use it
   3 - Apply this script on the result using a XSLT processor
 
 It should work with any XSLT processor although I only tried it with "xsltproc"
+ex: xsltproc --html exe2eLML.xsl eXeExport.html >eLMLOutput.xml
 
 What is done
 ------------

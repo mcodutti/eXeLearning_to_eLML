@@ -1,0 +1,57 @@
+===========================================================
+                     eXe2eLML - Reference
+-----------------------------------------------------------
+
+This document contains informations I found when writing
+the script.
+
+Why use the "One page HTML export" of eXeLearning ?
+------------------------------------------------------
+1) The internal data format for an eXe document was not clear to me
+   It is a zip of a ".data" file and I was not able to understand it.
+2) The "One page HTML export" is a XHTML file which was very adapted
+   to a XSLT transformation
+3) Badfully it does not preserve the tree structure of the (exe) Idevices
+   (they are all put at the same level)
+
+Structure of the "One page HTML export" of eXeLearning
+------------------------------------------------------
+html
+	head
+	body
+		div id=content
+			div id=header // the document title
+			div id=main
+				div class=node	// each section
+					div id=nodeDecoration
+						p id=nodeTitle // section title
+					div class=***Idevice   // each Idevice
+
+The exact ***Idevice depends on the content's type
+- custom : free text with some personalized stuff (like the icon)
+- objectives : free text aiming to give the objectives of the document
+- MultiSelect : multiple choice exercice
+- activity : an activity (something the student should do)
+- FreeText : free text
+- Cloze : fill in the blanks exercice
+
+The structure of an Idevice vary but with a common basis.
+div class=***Idevice
+	div class=iDevice 	// + emphasis1 (or 0? not clear to me)
+		img				// Idevice's icon
+		span	class=iDeviceTitle	// Idevice's title	
+		div class=iDevice_inner         // Idevice's content
+
+Issues
+------
+- Paragraphs
+	A <p> tag is converted into a <paragraph> tag. But it seems that eLML
+	merge to consecutives paragraphs so I added a <newLine/> at the end
+	of each <paragraph> which is too much in some case
+	Todo : Add a <newLine/> only if the following is also a <paragraph>
+- Fill in the Blanks
+	In the eXe output, answers are coded so I insert a default answer
+	Toto : investigate the javascript that decode the answer and use
+	it during the conversion.
+===========================================================
+

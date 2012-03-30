@@ -164,7 +164,7 @@
 	</xsl:template>
 	
 	<xsl:template match="input[contains(@id,'clozeBlank')]">
-		<gap answers="x"/>
+		<gap answers="x">x</gap>
 	</xsl:template>
 	<xsl:template match="span[contains(@id,'clozeAnswer')]"/>
 <!--

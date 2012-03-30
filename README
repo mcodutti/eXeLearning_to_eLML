@@ -10,13 +10,9 @@
   It has been written for my practical situation but may be
   useful for others too.
 
-  How it works :
-  1 - Open the eXe document with the eXeLearning software
-  2 - Export it as a "unique HTML page"
-  3 - Apply this script on the result using a XSLT processor
-
-  It should work with any XSLT processor although 
-  I only tried it with "xsltproc"
+  See
+  - Manual : How to use it
+  - Technical : Some technical stuff if you want to modify it
 
   by Marco Codutti, version 0.1
   published under the Creative Common licence CC-BY
