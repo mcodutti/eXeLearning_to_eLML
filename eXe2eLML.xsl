@@ -178,7 +178,9 @@
 	<xsl:template match="p">
 		<parapraph>
 			<xsl:apply-templates/>
-			<newLine/>
+			<xsl:if test="name(following-sibling::*[1])='p'">
+				<newLine space="long"/>
+			</xsl:if>
 		</parapraph>
 	</xsl:template>
 	<xsl:template match="br">

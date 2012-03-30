@@ -46,9 +46,9 @@ Issues
 ------
 - Paragraphs
 	A <p> tag is converted into a <paragraph> tag. But it seems that eLML
-	merge to consecutives paragraphs so I added a <newLine/> at the end
-	of each <paragraph> which is too much in some case
-	Todo : Add a <newLine/> only if the following is also a <paragraph>
+	merge to consecutives paragraphs (is it documented ?)
+	I added a <newLine space="long"/> at the end of each <paragraph> which 
+	is followed by another parapgraph.
 - Fill in the Blanks
 	In the eXe output, answers are coded so I insert a default answer
 	Toto : investigate the javascript that decode the answer and use
