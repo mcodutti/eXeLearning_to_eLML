@@ -228,13 +228,24 @@ v								<xsl:when test="$answerNumber=1">Vrai</xsl:when>
 
 	<!-- paragraph -->
 	<!-- extra <newLine/> to prevent successives paragraphs to be merged-->
+	<!-- no paragraph in a question -->
 	<xsl:template match="p">
-		<paragraph>
-			<xsl:apply-templates/>
-			<xsl:if test="name(following-sibling::*[1])='p'">
-				<newLine space="long"/>
-			</xsl:if>
-		</paragraph>
+		<xsl:choose>
+			<xsl:when test="ancestor::div[@class='question']">
+				<xsl:apply-templates/>
+				<xsl:if test="name(following-sibling::*[1])='p'">
+					<newLine space="long"/>
+				</xsl:if>
+			</xsl:when>
+			<xsl:otherwise>
+				<paragraph>
+					<xsl:apply-templates/>
+					<xsl:if test="name(following-sibling::*[1])='p'">
+						<newLine space="long"/>
+					</xsl:if>
+				</paragraph>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	<!-- linebreak. Should be enclosed into a paragraph if not already done -->
 	<xsl:template match="br">
@@ -274,20 +285,32 @@ v								<xsl:when test="$answerNumber=1">Vrai</xsl:when>
 	</xsl:template>
 	
 	<!-- Texts styles : bold, italic, courier -->
+	<!-- Remove if empty -->
 	<xsl:template match="b">
-		<formatted style="bold">
-			<xsl:apply-templates/>
-		</formatted>
+		<xsl:call-template name="formatted">
+			<xsl:with-param name="type">bold</xsl:with-param>
+		</xsl:call-template>			
 	</xsl:template>
 	<xsl:template match="i">
-		<formatted style="italic">
-			<xsl:apply-templates/>
-		</formatted>
+		<xsl:call-template name="formatted">
+			<xsl:with-param name="type">italic</xsl:with-param>
+		</xsl:call-template>			
 	</xsl:template>
 	<xsl:template match="font[@face='courier new,courier']">
 		<formatted style="code">
 			<xsl:apply-templates/>
 		</formatted>
+	</xsl:template>
+	<xsl:template name="formatted">
+		<xsl:param name="type"/>
+		<xsl:if test="string(.)">
+			<formatted>
+				<xsl:attribute name="style">
+					<xsl:value-of select="$type"/>
+				</xsl:attribute>
+				<xsl:apply-templates/>
+			</formatted>	
+		</xsl:if>	
 	</xsl:template>
 	
 	<!-- Images -->
@@ -310,9 +333,9 @@ v								<xsl:when test="$answerNumber=1">Vrai</xsl:when>
 	-->
 	<!-- term -->
 	<xsl:template match="span[@class='term']">
-		<formatted style="input">
-			<xsl:apply-templates/>
-		</formatted>
+		<xsl:call-template name="formatted">
+			<xsl:with-param name="type">input</xsl:with-param>
+		</xsl:call-template>			
 	</xsl:template> 
 
 </xsl:stylesheet>
