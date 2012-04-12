@@ -236,8 +236,16 @@ v								<xsl:when test="$answerNumber=1">Vrai</xsl:when>
 			</xsl:if>
 		</paragraph>
 	</xsl:template>
+	<!-- linebreak. Should be enclosed into a paragraph if not already done -->
 	<xsl:template match="br">
+		<xsl:choose>
+		<xsl:when test="ancestor::p">
 			<newLine/>
+		</xsl:when>
+		<xsl:otherwise>
+			<paragraph><newLine/></paragraph>
+		</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 	<!-- List -->
