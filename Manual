@@ -9,7 +9,7 @@ How to use it
   3 - Apply this script on the result using a XSLT processor
 
 It should work with any XSLT processor although I only tried it with "xsltproc"
-ex: xsltproc --html exe2eLML.xsl eXeExport.html >eLMLOutput.xml
+usage: xsltproc --html exe2eLML.xsl eXeExport.html >eLMLOutput.xml
 
 What is done
 ------------
@@ -19,20 +19,27 @@ It creates the main structure of the eLML document but :
     create one unit with all the learningObjects
   - The first node is converted into the unit's entry not a learningObject
 
-The following IDevice are translated
+IDevice translation status (7 out of 19 done)
 
-  - Activity : done
-	put into an <act> tag with the "act" icon
-  - FreeText : done
-	put into a <clarify> tag with no icon
-  - Objectives : done (treated as an Activity device)
-	put into an <clarify> tag with the "objective" icon
-  - Multiple Choice : done
-	put into an <act> tag, shuffle mode on
-  - Cloze (fillInBlanks) : partially done
-	As the answers are coded they are not in the resulting document
-  - custom : done
-	put into an <clarify> tag with the icon found in the first <img> tag
+ - Activity         : done (put into an <act> tag with the "act" icon)
+ - Case Study       : no
+ - Cloze Activity   : ~  (as the answers are coded they are not in the resulting document)
+ - External website : no 
+ - Free Text Area   : done (put into a <clarify> tag with no icon)
+ - Image Gallery    : no
+ - Image Magnbifier : no
+ - Multi-Choice     : done (put into an <act> tag, shuffle mode on)
+ - Multi-select     : no
+ - Java Applet      : no
+ - Objectives       : done (put into an <clarify> tag with the "objective" icon)
+ - Preknowledge     : no
+ - RSS              : no
+ - Reading Activity : no
+ - Reflection       : done
+ - SCORM Quiz       : no
+ - True/False       : no
+ - Wiki article     : no
+ - Custom           : done (put into an <clarify> tag with the icon found in the first <img> tag)
 
 Feedbacks
 

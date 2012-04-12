@@ -97,20 +97,6 @@
 	</xsl:template>
 	<!--
 	============================================================
-		ReflectionIDevice (custom Idevice ?)
-			Converted into a act/paragraph with popup for the answer
-			icon : question
-	============================================================
-	-->
-	<xsl:template match="div[@class='ReflectionIdevice']">
-		<act>
-			<paragraph title="{.//span[@class='iDeviceTitle']}" icon="question"/>
-			<xsl:apply-templates select=".//div[@class='iDevice_inner']/div[1]"/>
-			<xsl:apply-templates select=".//div[@class='feedback']"/>
-		</act>
-	</xsl:template>
-	<!--
-	============================================================
 		MultipleChoiceiDevice
 			Converted into a act>selfCheck>multipleChoice
 			Shuffle mode : yes
@@ -144,7 +130,7 @@
 		<!--
 	============================================================
 		ClozeIdevice
-			Not implemented yet
+			Partially implemented (no answer)
 	============================================================
 	-->
 	<xsl:template match="div[@class='ClozeIdevice']">
@@ -167,6 +153,44 @@
 		<gap answers="x">x</gap>
 	</xsl:template>
 	<xsl:template match="span[contains(@id,'clozeAnswer')]"/>
+	<!--
+	============================================================
+		TrueFalseIdevice
+		!!! Under Development !!!
+			Converted into a act>selfCheck>multipleChoice
+			with oui/non answer (yes/no in french)
+			Shuffle mode : no
+	============================================================
+	-->
+	<xsl:template match="div[@class='TrueFalseIdevice']">
+		<act>
+		    <xsl:variable name="exTitle" select=".//span[@class='iDeviceTitle']"/>
+				<xsl:for-each select="//div[@class='question']">
+					<selfCheck title="{$exTitle}" shuffle="no">
+    			    <multipleChoice>
+	  			    <question>
+					    <xsl:apply-templates select=".//div[starts-with(@id,'taquestion')]"/>
+				    </question>
+				    <xsl:for-each select=".//input">
+					    <xsl:variable name="answerNumber" select="position()"/>
+						<answer>
+							<xsl:attribute name="correct">
+								<xsl:if test="following-sibling::div[position()=$answerNumber and @even_steven='96']">yes</xsl:if>
+								<xsl:if test="following-sibling::div[position()=$answerNumber and @even_steven='97']">no</xsl:if>
+							</xsl:attribute>
+							<!-- extract the feedback part -->	
+							<!-- extract the text in the document -->
+							<xsl:choose>
+								<xsl:when test="$answerNumber=1">Vrai</xsl:when>
+								<xsl:otherwise>Faux</xsl:otherwise>
+							</xsl:choose>
+						</answer>
+				    </xsl:for-each>
+					</multipleChoice>
+					</selfCheck>
+				</xsl:for-each>
+		</act>
+	</xsl:template>
 <!--
 	============================================================
 		iDevice's content
@@ -253,5 +277,20 @@
 			<xsl:apply-templates/>
 		</formatted>
 	</xsl:template> 
- 
+
+	<!--
+	============================================================
+		ReflectionIDevice (custom Idevice ?)
+			Converted into a act/paragraph with popup for the answer
+			icon : question
+	============================================================
+	-->
+	<xsl:template match="div[@class='ReflectionIdevice']">
+		<act>
+			<paragraph title="{.//span[@class='iDeviceTitle']}" icon="question"/>
+			<xsl:apply-templates select=".//div[@class='iDevice_inner']/div[1]"/>
+			<xsl:apply-templates select=".//div[@class='feedback']"/>
+		</act>
+	</xsl:template>
+
 </xsl:stylesheet>
