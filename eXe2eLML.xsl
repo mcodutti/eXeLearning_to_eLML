@@ -33,12 +33,12 @@
 		<xsl:choose>
 			<xsl:when test="position()=1">
 				<entry>
-					<xsl:apply-templates select="./*[position()>1]"/>
+					<xsl:apply-templates select="./*[position()>1]" mode="entry"/>
 				</entry>
 			</xsl:when>
 			<xsl:otherwise>
 				<learningObject title="{.//p[@id='nodeTitle']}">
-					<xsl:apply-templates select="./*[position()>1]"/>
+					<xsl:apply-templates select="./*[position()>1]" mode="lo"/>
 				</learningObject>
 			</xsl:otherwise>
 		</xsl:choose>
@@ -52,31 +52,37 @@
 		Activity
 		Converted into a act/paragraph with 'act' icon
 	-->
-	<xsl:template match="div[@class='activityIdevice']">
+	<xsl:template match="div[@class='activityIdevice']" mode="lo">
 		<act>
-			<paragraph title="{.//span[@class='iDeviceTitle']}" icon="act"/>
-			<xsl:apply-templates select=".//div[@class='iDevice_inner']"/>
+			<xsl:apply-templates select="." mode="entry"/>
 		</act>
+	</xsl:template>
+	<xsl:template match="div[@class='activityIdevice']" mode="entry">
+		<paragraph title="{.//span[@class='iDeviceTitle']}" icon="act"/>
+		<xsl:apply-templates select=".//div[@class='iDevice_inner']"/>
 	</xsl:template>
 	<!--
 		ClozeIdevice
 		Converted into a act/selCheck/fillInBlanks
 		Partially implemented (no solution, default gap)
 	-->
-	<xsl:template match="div[@class='ClozeIdevice']">
+	<xsl:template match="div[@class='ClozeIdevice']" mode="lo">
 		<act>
-			<selfCheck title="{.//span[@class='iDeviceTitle']}" shuffle="yes">
-			<fillInBlanks>
-				<question>
-					<xsl:apply-templates select=".//div[@class='iDevice_inner']/div[1]"/>
-				</question>
-				<gapText>
-					<xsl:apply-templates select=".//div[@class='iDevice_inner']/div[2]"/>
-				</gapText>
-				<solution>[Mettre la solution ici]</solution>
-			</fillInBlanks>
-			</selfCheck>
+			<xsl:apply-templates select="." mode="entry"/>
 		</act>
+	</xsl:template>
+	<xsl:template match="div[@class='ClozeIdevice']" mode="entry">
+		<selfCheck title="{.//span[@class='iDeviceTitle']}" shuffle="yes">
+		<fillInBlanks>
+			<question>
+				<xsl:apply-templates select=".//div[@class='iDevice_inner']/div[1]"/>
+			</question>
+			<gapText>
+				<xsl:apply-templates select=".//div[@class='iDevice_inner']/div[2]"/>
+			</gapText>
+			<solution>[Mettre la solution ici]</solution>
+		</fillInBlanks>
+		</selfCheck>
 	</xsl:template>
 	
 	<xsl:template match="input[contains(@id,'clozeBlank')]">
@@ -87,10 +93,13 @@
 		FreeText
 		Converted into a clarify without a title
 	-->
-	<xsl:template match="div[@class='FreeTextIDevice']">
+	<xsl:template match="div[@class='FreeTextIDevice']" mode="lo">
 		<clarify>
-			<xsl:apply-templates/>
+			<xsl:apply-templates select="." mode="entry"/>
 		</clarify>
+	</xsl:template>
+	<xsl:template match="div[@class='FreeTextIDevice']" mode="entry">
+		<xsl:apply-templates/>
 	</xsl:template>
 	<!--
 		MultipleChoiceiDevice
@@ -98,65 +107,77 @@
 		Shuffle mode : yes
 		Treated by eLML as a OneChoice if only one correct answer
 	-->
-	<xsl:template match="div[@class='MultiSelectIdevice']">
+	<xsl:template match="div[@class='MultiSelectIdevice']" mode="lo">
 		<act>
-			<selfCheck title="{.//span[@class='iDeviceTitle']}" shuffle="yes">
-			<multipleChoice>
-				<question>
-					<xsl:apply-templates select=".//div[@class='iDevice_inner']/div[@class='question']/div[1]"/>
-				</question>
-				<xsl:for-each select=".//tr[.//input]">
-					<xsl:variable name="answerNumber" select="position()"/>
-					<answer feedback="{position()}">
-						<xsl:attribute name="correct">
-							<xsl:if test=".//input/@value='True'">yes</xsl:if>
-							<xsl:if test=".//input/@value='False'">no</xsl:if>
-						</xsl:attribute>
-						<xsl:attribute name="feedback">
-							<xsl:value-of select="ancestor::div[@class='question']/div[last()]//p[$answerNumber]"/>
-						</xsl:attribute>
-						<xsl:apply-templates select="td[2]"/>
-					</answer>
-				</xsl:for-each>
-			</multipleChoice>
-			</selfCheck>
+			<xsl:apply-templates select="." mode="entry"/>
 		</act>
+	</xsl:template>
+	<xsl:template match="div[@class='MultiSelectIdevice']" mode="entry">
+		<selfCheck title="{.//span[@class='iDeviceTitle']}" shuffle="yes">
+		<multipleChoice>
+			<question>
+				<xsl:apply-templates select=".//div[@class='iDevice_inner']/div[@class='question']/div[1]"/>
+			</question>
+			<xsl:for-each select=".//tr[.//input]">
+				<xsl:variable name="answerNumber" select="position()"/>
+				<answer feedback="{position()}">
+					<xsl:attribute name="correct">
+						<xsl:if test=".//input/@value='True'">yes</xsl:if>
+						<xsl:if test=".//input/@value='False'">no</xsl:if>
+					</xsl:attribute>
+					<xsl:attribute name="feedback">
+						<xsl:value-of select="ancestor::div[@class='question']/div[last()]//p[$answerNumber]"/>
+					</xsl:attribute>
+					<xsl:apply-templates select="td[2]"/>
+				</answer>
+			</xsl:for-each>
+		</multipleChoice>
+		</selfCheck>
 	</xsl:template>
 	<!--
 		ObjectivesIDevice
 		Converted into a clarify/paragraph with the objective icon
 	-->
-	<xsl:template match="div[@class='objectivesIdevice']">
+	<xsl:template match="div[@class='objectivesIdevice']" mode="lo">
 		<clarify>
-			<paragraph title="{.//span[@class='iDeviceTitle']}" icon="objective"/>
-			<xsl:apply-templates select=".//div[@class='iDevice_inner']"/>
+			<xsl:apply-templates select="." mode="entry"/>
 		</clarify>
+	</xsl:template>
+	<xsl:template match="div[@class='objectivesIdevice']" mode="entry">
+		<paragraph title="{.//span[@class='iDeviceTitle']}" icon="objective"/>
+		<xsl:apply-templates select=".//div[@class='iDevice_inner']"/>
 	</xsl:template>
 	<!--
 		ReflectionIDevice
 		Converted into a act/paragraph with popup for the answer
 		icon : question
 	-->
-	<xsl:template match="div[@class='ReflectionIdevice']">
+	<xsl:template match="div[@class='ReflectionIdevice']" mode="lo">
 		<act>
+			<xsl:apply-templates select="." mode="entry"/>
+		</act>
+	</xsl:template>
+	<xsl:template match="div[@class='ReflectionIdevice']" mode="entry">
 			<paragraph title="{.//span[@class='iDeviceTitle']}" icon="question"/>
 			<xsl:apply-templates select=".//div[@class='iDevice_inner']/div[1]"/>
 			<xsl:apply-templates select=".//div[@class='feedback']"/>
-		</act>
 	</xsl:template>
 	<!--
 		customIDevice
 		Converted into a clarify/paragraph
 		The icon is found in img/@src
 	-->
-	<xsl:template match="div[@class='customIdevice']">
+	<xsl:template match="div[@class='customIdevice']" mode="lo">
 		<clarify>
+			<xsl:apply-templates select="." mode="entry"/>
+		</clarify>
+	</xsl:template>
+	<xsl:template match="div[@class='customIdevice']" mode="entry">
 			<paragraph
 				title="{.//span[@class='iDeviceTitle']}"
 				icon="{substring-before(.//img/@src,'.')}">
 			</paragraph>
 			<xsl:apply-templates select=".//div[@class='iDevice_inner']"/>
-		</clarify>
 	</xsl:template>
 	<!--
 	============================================================
@@ -208,12 +229,12 @@ v								<xsl:when test="$answerNumber=1">Vrai</xsl:when>
 	<!-- paragraph -->
 	<!-- extra <newLine/> to prevent successives paragraphs to be merged-->
 	<xsl:template match="p">
-		<parapraph>
+		<paragraph>
 			<xsl:apply-templates/>
 			<xsl:if test="name(following-sibling::*[1])='p'">
 				<newLine space="long"/>
 			</xsl:if>
-		</parapraph>
+		</paragraph>
 	</xsl:template>
 	<xsl:template match="br">
 			<newLine/>
