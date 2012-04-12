@@ -55,5 +55,10 @@ Inside an IDevice the following are translated
   - ordered an unordered lists
   - styles : bold, italic and code
   - paragraphs
+  
+Some Issues
+-----------
+1) A multi-choice with only one correct answer will be treated as a single-choice by eLML
+   (so visually clear for the reader that only one answer is correct)
 ===========================================================
 

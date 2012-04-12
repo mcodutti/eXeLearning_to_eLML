@@ -45,49 +45,12 @@
 	</xsl:template>
 	<!--
 	============================================================
-		objectivesIDevice
-			Converted into a clarify/paragraph
-			icon : objective
+		Treat each IDevice
 	============================================================
 	-->
-	<xsl:template match="div[@class='objectivesIdevice']">
-		<clarify>
-			<paragraph title="{.//span[@class='iDeviceTitle']}" icon="objective"/>
-			<xsl:apply-templates select=".//div[@class='iDevice_inner']"/>
-		</clarify>
-	</xsl:template>
-	<!--
-	============================================================
-		FreeTextIDevice
-			Converted into a clarify/paragraph without a title
-	============================================================
-	-->
-	<xsl:template match="div[@class='FreeTextIDevice']">
-		<clarify>
-			<xsl:apply-templates/>
-		</clarify>
-	</xsl:template>
-	<!--
-	============================================================
-		customIDevice
-			Converted into a clarify/paragraph
-			The icon is found in img/@src
-	============================================================
-	-->
-	<xsl:template match="div[@class='customIdevice']">
-		<clarify>
-			<paragraph
-				title="{.//span[@class='iDeviceTitle']}"
-				icon="{substring-before(.//img/@src,'.')}">
-			</paragraph>
-			<xsl:apply-templates select=".//div[@class='iDevice_inner']"/>
-		</clarify>
-	</xsl:template>
-	<!--
-	============================================================
-		activityIdevice
-			Converted into a act/paragraph with 'act' icon
-	============================================================
+	<!-- 
+		Activity
+		Converted into a act/paragraph with 'act' icon
 	-->
 	<xsl:template match="div[@class='activityIdevice']">
 		<act>
@@ -96,12 +59,44 @@
 		</act>
 	</xsl:template>
 	<!--
-	============================================================
+		ClozeIdevice
+		Converted into a act/selCheck/fillInBlanks
+		Partially implemented (no solution, default gap)
+	-->
+	<xsl:template match="div[@class='ClozeIdevice']">
+		<act>
+			<selfCheck title="{.//span[@class='iDeviceTitle']}" shuffle="yes">
+			<fillInBlanks>
+				<question>
+					<xsl:apply-templates select=".//div[@class='iDevice_inner']/div[1]"/>
+				</question>
+				<gapText>
+					<xsl:apply-templates select=".//div[@class='iDevice_inner']/div[2]"/>
+				</gapText>
+				<solution>[Mettre la solution ici]</solution>
+			</fillInBlanks>
+			</selfCheck>
+		</act>
+	</xsl:template>
+	
+	<xsl:template match="input[contains(@id,'clozeBlank')]">
+		<gap answers="x">x</gap>
+	</xsl:template>
+	<xsl:template match="span[contains(@id,'clozeAnswer')]"/>
+	<!--
+		FreeText
+		Converted into a clarify without a title
+	-->
+	<xsl:template match="div[@class='FreeTextIDevice']">
+		<clarify>
+			<xsl:apply-templates/>
+		</clarify>
+	</xsl:template>
+	<!--
 		MultipleChoiceiDevice
-			Converted into a act>selfCheck>multipleChoice
-			Shuffle mode : yes
-			Treated by eLML as a OneChoice if only one correct answer
-	============================================================
+		Converted into a act/selfCheck/multipleChoice
+		Shuffle mode : yes
+		Treated by eLML as a OneChoice if only one correct answer
 	-->
 	<xsl:template match="div[@class='MultiSelectIdevice']">
 		<act>
@@ -127,40 +122,53 @@
 			</selfCheck>
 		</act>
 	</xsl:template>
-		<!--
-	============================================================
-		ClozeIdevice
-			Partially implemented (no answer)
-	============================================================
+	<!--
+		ObjectivesIDevice
+		Converted into a clarify/paragraph with the objective icon
 	-->
-	<xsl:template match="div[@class='ClozeIdevice']">
+	<xsl:template match="div[@class='objectivesIdevice']">
+		<clarify>
+			<paragraph title="{.//span[@class='iDeviceTitle']}" icon="objective"/>
+			<xsl:apply-templates select=".//div[@class='iDevice_inner']"/>
+		</clarify>
+	</xsl:template>
+	<!--
+		ReflectionIDevice
+		Converted into a act/paragraph with popup for the answer
+		icon : question
+	-->
+	<xsl:template match="div[@class='ReflectionIdevice']">
 		<act>
-			<selfCheck title="{.//span[@class='iDeviceTitle']}" shuffle="yes">
-			<fillInBlanks>
-				<question>
-					<xsl:apply-templates select=".//div[@class='iDevice_inner']/div[1]"/>
-			  </question>
-			  <gapText>
-					<xsl:apply-templates select=".//div[@class='iDevice_inner']/div[2]"/>
-			  </gapText>
-			  <solution>[Mettre la solution ici]</solution>
-			</fillInBlanks>
-			</selfCheck>
+			<paragraph title="{.//span[@class='iDeviceTitle']}" icon="question"/>
+			<xsl:apply-templates select=".//div[@class='iDevice_inner']/div[1]"/>
+			<xsl:apply-templates select=".//div[@class='feedback']"/>
 		</act>
 	</xsl:template>
-	
-	<xsl:template match="input[contains(@id,'clozeBlank')]">
-		<gap answers="x">x</gap>
+	<!--
+		customIDevice
+		Converted into a clarify/paragraph
+		The icon is found in img/@src
+	-->
+	<xsl:template match="div[@class='customIdevice']">
+		<clarify>
+			<paragraph
+				title="{.//span[@class='iDeviceTitle']}"
+				icon="{substring-before(.//img/@src,'.')}">
+			</paragraph>
+			<xsl:apply-templates select=".//div[@class='iDevice_inner']"/>
+		</clarify>
 	</xsl:template>
-	<xsl:template match="span[contains(@id,'clozeAnswer')]"/>
 	<!--
 	============================================================
+		Experimental IDevice conversions
+	============================================================
+	-->
+	<!--
 		TrueFalseIdevice
 		!!! Under Development !!!
 			Converted into a act>selfCheck>multipleChoice
 			with oui/non answer (yes/no in french)
 			Shuffle mode : no
-	============================================================
 	-->
 	<xsl:template match="div[@class='TrueFalseIdevice']">
 		<act>
@@ -181,7 +189,7 @@
 							<!-- extract the feedback part -->	
 							<!-- extract the text in the document -->
 							<xsl:choose>
-								<xsl:when test="$answerNumber=1">Vrai</xsl:when>
+v								<xsl:when test="$answerNumber=1">Vrai</xsl:when>
 								<xsl:otherwise>Faux</xsl:otherwise>
 							</xsl:choose>
 						</answer>
@@ -190,8 +198,8 @@
 					</selfCheck>
 				</xsl:for-each>
 		</act>
-	</xsl:template>
-<!--
+	</xsl:template>	
+	<!--
 	============================================================
 		iDevice's content
 	============================================================
@@ -260,12 +268,12 @@
 		</popup>
 	</xsl:template>
 
-  <!-- feedback becomes popup -->
-  <xsl:template match="div[@class='feedback']">
-			<popup>
-				<xsl:apply-templates/>
-			</popup>
-  </xsl:template>
+	<!-- feedback becomes popup -->
+	<xsl:template match="div[@class='feedback']">
+		<popup>
+			<xsl:apply-templates/>
+		</popup>
+	</xsl:template>
 <!--
 	============================================================
 		The followings are custom eXe extensions
@@ -277,20 +285,5 @@
 			<xsl:apply-templates/>
 		</formatted>
 	</xsl:template> 
-
-	<!--
-	============================================================
-		ReflectionIDevice (custom Idevice ?)
-			Converted into a act/paragraph with popup for the answer
-			icon : question
-	============================================================
-	-->
-	<xsl:template match="div[@class='ReflectionIdevice']">
-		<act>
-			<paragraph title="{.//span[@class='iDeviceTitle']}" icon="question"/>
-			<xsl:apply-templates select=".//div[@class='iDevice_inner']/div[1]"/>
-			<xsl:apply-templates select=".//div[@class='feedback']"/>
-		</act>
-	</xsl:template>
 
 </xsl:stylesheet>
