@@ -45,7 +45,7 @@
 	</xsl:template>
 	<!--
 	============================================================
-		Treat each IDevice
+		Convert each IDevice
 	============================================================
 	-->
 	<!-- 
@@ -247,6 +247,7 @@ v								<xsl:when test="$answerNumber=1">Vrai</xsl:when>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	
 	<!-- linebreak. Should be enclosed into a paragraph if not already done -->
 	<xsl:template match="br">
 		<xsl:choose>
@@ -288,12 +289,12 @@ v								<xsl:when test="$answerNumber=1">Vrai</xsl:when>
 	<!-- Remove if empty -->
 	<xsl:template match="b">
 		<xsl:call-template name="formatted">
-			<xsl:with-param name="type">bold</xsl:with-param>
+			<xsl:with-param name="type" select="'bold'"/>
 		</xsl:call-template>			
 	</xsl:template>
 	<xsl:template match="i">
 		<xsl:call-template name="formatted">
-			<xsl:with-param name="type">italic</xsl:with-param>
+			<xsl:with-param name="type" select="'italic'"/>
 		</xsl:call-template>			
 	</xsl:template>
 	<xsl:template match="font[@face='courier new,courier']">
@@ -304,10 +305,7 @@ v								<xsl:when test="$answerNumber=1">Vrai</xsl:when>
 	<xsl:template name="formatted">
 		<xsl:param name="type"/>
 		<xsl:if test="string(.)">
-			<formatted>
-				<xsl:attribute name="style">
-					<xsl:value-of select="$type"/>
-				</xsl:attribute>
+			<formatted style="{$type}">
 				<xsl:apply-templates/>
 			</formatted>	
 		</xsl:if>	
@@ -334,7 +332,7 @@ v								<xsl:when test="$answerNumber=1">Vrai</xsl:when>
 	<!-- term -->
 	<xsl:template match="span[@class='term']">
 		<xsl:call-template name="formatted">
-			<xsl:with-param name="type">input</xsl:with-param>
+			<xsl:with-param name="type" select="'input'"/>
 		</xsl:call-template>			
 	</xsl:template> 
 

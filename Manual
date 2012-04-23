@@ -55,6 +55,11 @@ Inside an IDevice the following are translated
   - ordered an unordered lists
   - styles : bold, italic and code
   - paragraphs
+
+Post Processing
+---------------
+The script does not manage very well paragrahs and new lines.
+You'll probably have to manually fine tunes theses aspects.
   
 Some Issues
 -----------
