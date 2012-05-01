@@ -86,7 +86,7 @@
 	</xsl:template>
 	
 	<xsl:template match="input[contains(@id,'clozeBlank')]">
-		<gap answers="x">x</gap>
+		<gap answers="">x</gap>
 	</xsl:template>
 	<xsl:template match="span[contains(@id,'clozeAnswer')]"/>
 	<!--
@@ -227,29 +227,22 @@ v								<xsl:when test="$answerNumber=1">Vrai</xsl:when>
 	-->
 
 	<!-- paragraph -->
-	<!-- extra <newLine/> to prevent successives paragraphs to be merged-->
 	<!-- no paragraph in a question -->
 	<xsl:template match="p">
 		<xsl:choose>
 			<xsl:when test="ancestor::div[@class='question']">
 				<xsl:apply-templates/>
-				<xsl:if test="name(following-sibling::*[1])='p'">
-					<newLine space="long"/>
-				</xsl:if>
 			</xsl:when>
 			<xsl:otherwise>
 				<paragraph>
 					<xsl:apply-templates/>
-					<xsl:if test="name(following-sibling::*[1])='p'">
-						<newLine space="long"/>
-					</xsl:if>
 				</paragraph>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 	
 	<!-- linebreak. Should be enclosed into a paragraph if not already done -->
-	<xsl:template match="br">
+	<!--<xsl:template match="br">
 		<xsl:choose>
 		<xsl:when test="ancestor::p">
 			<newLine/>
@@ -258,6 +251,9 @@ v								<xsl:when test="$answerNumber=1">Vrai</xsl:when>
 			<paragraph><newLine/></paragraph>
 		</xsl:otherwise>
 		</xsl:choose>
+	</xsl:template>-->
+	<xsl:template match="br">
+		<newLine/>
 	</xsl:template>
 
 	<!-- List -->
