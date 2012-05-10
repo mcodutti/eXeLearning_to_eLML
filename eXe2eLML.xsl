@@ -135,6 +135,39 @@
 		</selfCheck>
 	</xsl:template>
 	<!--
+		SingleChoiceiDevice
+		Converted into a act/selfCheck/multipleChoice
+		Shuffle mode : yes
+		Treated by eLML as a OneChoice if only one correct answer
+	-->
+	<xsl:template match="div[@class='MultichoiceIdevice']" mode="lo">
+		<act>
+			<xsl:apply-templates select="." mode="entry"/>
+		</act>
+	</xsl:template>
+	<xsl:template match="div[@class='MultichoiceIdevice']" mode="entry">
+		<selfCheck title="{.//span[@class='iDeviceTitle']}" shuffle="yes">
+		<multipleChoice>
+			<question>
+				<xsl:apply-templates select=".//div[@class='iDevice_inner']/div[@class='question']/div[1]"/>
+			</question>
+			<xsl:for-each select=".//tr[.//input]">
+				<xsl:variable name="answerNumber" select="position()"/>
+				<answer feedback="{position()}">
+					<xsl:attribute name="correct">
+						<xsl:if test=".//input/@value='True'">yes</xsl:if>
+						<xsl:if test=".//input/@value='False'">no</xsl:if>
+					</xsl:attribute>
+					<xsl:attribute name="feedback">
+						<xsl:value-of select="ancestor::div[@class='question']/div[last()]//p[$answerNumber]"/>
+					</xsl:attribute>
+					<xsl:apply-templates select="td[2]"/>
+				</answer>
+			</xsl:for-each>
+		</multipleChoice>
+		</selfCheck>
+	</xsl:template>
+	<!--
 		ObjectivesIDevice
 		Converted into a clarify/paragraph with the objective icon
 	-->
