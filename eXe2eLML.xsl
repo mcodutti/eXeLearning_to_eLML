@@ -16,7 +16,11 @@
 	============================================================ 
 	-->
 	<xsl:template match="/">
-		<lesson xmlns="http://www.elml.ch" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.elml.ch ../../../_config/validate.xsd" label="{/html/head/title}" title="{/html/body/div/div[@id='main']/div[1]/div/p}">
+		<lesson xmlns="http://www.elml.ch"
+		        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		        xsi:schemaLocation="http://www.elml.ch ../../../_config/validate.xsd"
+		        label="{/html/head/title}"
+		        title="{/html/body/div/div[@id='main']/div[1]/div/p}">
 			<unit label="{/html/head/title}" title="{//div[@id='main']/div[1]/div/p}">
 				<xsl:apply-templates select="//div[@class='node']"/>
 			</unit>
@@ -57,6 +61,7 @@
 			<xsl:apply-templates select="." mode="entry"/>
 		</act>
 	</xsl:template>
+	
 	<xsl:template match="div[@class='activityIdevice']" mode="entry">
 		<paragraph title="{.//span[@class='iDeviceTitle']}" icon="act"/>
 		<xsl:apply-templates select=".//div[@class='iDevice_inner']"/>
@@ -80,26 +85,28 @@
 			<gapText>
 				<xsl:apply-templates select=".//div[@class='iDevice_inner']/div[2]"/>
 			</gapText>
-			<solution>[Mettre la solution ici]</solution>
+			<solution></solution>
 		</fillInBlanks>
 		</selfCheck>
 	</xsl:template>
 	
 	<xsl:template match="input[contains(@id,'clozeBlank')]">
-		<gap answers="">x</gap>
+		<gap answers="">
+			<xsl:text>x</xsl:text>
+		</gap>
 	</xsl:template>
 	<xsl:template match="span[contains(@id,'clozeAnswer')]"/>
 	<!--
 		FreeText
 		Converted into a clarify without a title
 	-->
-	<xsl:template match="div[@class='FreeTextIDevice']" mode="lo">
+	<xsl:template match="div[@class='FreeTextIdevice']" mode="lo">
 		<clarify>
-			<xsl:apply-templates select="." mode="entry"/>
+			<xsl:apply-templates/>
 		</clarify>
 	</xsl:template>
-	<xsl:template match="div[@class='FreeTextIDevice']" mode="entry">
-		<xsl:apply-templates/>
+	<xsl:template match="div[@class='FreeTextIdevice']" mode="entry">
+		<xsl:apply-templates select="." mode="entry"/>
 	</xsl:template>
 	<!--
 		MultipleChoiceiDevice
@@ -308,6 +315,7 @@ v								<xsl:when test="$answerNumber=1">Vrai</xsl:when>
 			</xsl:when>
 		</xsl:choose>
 	</xsl:template>
+	
 	<xsl:template match="li">
 		<item>
 			<xsl:apply-templates/>
@@ -353,7 +361,30 @@ v								<xsl:when test="$answerNumber=1">Vrai</xsl:when>
 			<xsl:apply-templates/>
 		</popup>
 	</xsl:template>
-<!--
+	
+	<!-- tables -->
+	<xsl:template match="table">
+		<table>
+			<xsl:apply-templates/>
+		</table>
+	</xsl:template>
+	<xsl:template match="tr">
+		<tablerow>
+			<xsl:apply-templates/>
+		</tablerow>
+	</xsl:template>
+	<xsl:template match="th">
+		<tableheading>
+			<xsl:apply-templates/>
+		</tableheading>
+	</xsl:template>
+	<xsl:template match="td">
+		<tabledata>
+			<xsl:apply-templates/>
+		</tabledata>
+	</xsl:template>
+	
+    <!--
 	============================================================
 		The followings are custom eXe extensions
 	============================================================
